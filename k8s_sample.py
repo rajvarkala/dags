@@ -15,16 +15,16 @@ default_args = {
 }
 
 dag = DAG(
-    'streaming_data_and_dump_stdout', default_args=default_args, schedule_interval=timedelta(minutes=10))
+    'http_random_data', default_args=default_args, schedule_interval=timedelta(minutes=10))
 
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
 passing = KubernetesPodOperator(namespace='raj-airflow',
         image="tuskacad/fakerdata:latest",
                           labels={"foo": "bar"},
-                          name="fakedata-rudder_stdout",
+                          name="random_http_data",
                           task_id="pod_task",
-                          get_logs=True,
+                          get_logs=False,
                           dag=dag,
                           in_cluster=True
                           )
