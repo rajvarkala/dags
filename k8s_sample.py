@@ -20,7 +20,7 @@ dag = DAG(
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
 passing = KubernetesPodOperator(namespace='raj-airflow',
-        image="tuskacad/fakerdata:0.2",
+        image="tuskacad/fakerdata:0.3",
                           labels={"foo": "bar"},
                           name="random_http_data",
                           task_id="pod_task",
