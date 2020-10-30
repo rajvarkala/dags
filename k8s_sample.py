@@ -22,7 +22,7 @@ start = DummyOperator(task_id='run_this_first', dag=dag)
 passing = KubernetesPodOperator(namespace='raj-airflow',
         image="tuskacad/fakerdata:latest",
                           labels={"foo": "bar"},
-                          name="fakedata->rudder-stdout",
+                          name="fakedata-rudder_stdout",
                           task_id="pod_task",
                           get_logs=True,
                           dag=dag,
