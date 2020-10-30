@@ -15,33 +15,19 @@ default_args = {
 }
 
 dag = DAG(
-    'kubernetes_sample', default_args=default_args, schedule_interval=timedelta(minutes=10))
+    'streaming_data_and_dump_stdout', default_args=default_args, schedule_interval=timedelta(minutes=10))
 
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
 passing = KubernetesPodOperator(namespace='raj-airflow',
-                          image="python:3.6",
-                          cmds=["python","-c"],
-                          arguments=["print('hello world')"],
+        image="tuskacad/fakerdata:latest",
                           labels={"foo": "bar"},
-                          name="passing-test",
-                          task_id="passing-task",
+                          name="fakedata->rudder-stdout",
+                          task_id="pod_task",
                           get_logs=True,
                           dag=dag,
                           in_cluster=True
                           )
 
-failing = KubernetesPodOperator(namespace='raj-airflow',
-                          image="ubuntu:16.04",
-                          cmds=["python","-c"],
-                          arguments=["print('hello world')"],
-                          labels={"foo": "bar"},
-                          name="fail",
-                          task_id="failing-task",
-                          get_logs=True,
-                          dag=dag,
-                          in_cluster=True
-                          )
 
 passing.set_upstream(start)
-failing.set_upstream(start)
